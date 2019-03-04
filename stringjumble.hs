@@ -25,4 +25,20 @@
     
 -}
 
-main = putStrLn "Put your program here!"
+main = do
+    putStrLn "Please enter a string of text (the bigger the better): "
+    txt <- getLine
+    putStrLn ("You entered "++['"']++txt++['"']++".")
+    putStrLn "Now jumble it: "
+    putStrLn (reverse txt)
+    putStrLn (funcLineTwo txt)
+    putStrLn (funcLineThree txt)
+    
+
+funcLineTwo :: String -> String    
+funcLineTwo x = (unwords . reverse . words) x
+funcLineThree :: String -> String
+funcLineThree x = (unwords . reverseEach . words) x
+
+reverseEach :: [[a]] -> [[a]]
+reverseEach xs = [reverse x | x <- xs]
