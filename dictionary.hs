@@ -44,5 +44,24 @@
     *Main> 
     
 -}
+import Data.Char
 
-main = putStrLn "Put your program here!"
+---words* x = 
+
+repSpace [] = []
+repSpace ('\n':xs) = ' ':(repSpace xs)
+repSpace (x:xs) = x:(repSpace xs)
+
+main = do
+    putStrLn "Type any word and I will tell you if it is in the dictionary:"
+    word <- getLine
+    if not (word=="")
+        then do
+            wordList <- readFile "/usr/share/dict/american-english"
+            if (elem (map toLower word) ((words . repSpace) wordList))
+                then do
+                putStrLn $ "Yes, "++word++" is in the dictionary." 
+                else do
+                putStrLn $ "No, "++word++" is not in the dictionary."
+            main
+        else return ()
