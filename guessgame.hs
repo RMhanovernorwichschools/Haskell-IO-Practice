@@ -39,15 +39,34 @@
     I KNEW IT! Thank you.
 -}
 
-guessIt :: Int -> IO ()
-guessIt 11 = putStrLn "Wait.. I have already guessed everything! Cheater."
-guessIt s = do
-    putStrLn $ "Is your number " ++ show s ++ "? (answer \"yes\" or \"no\") "
-    guess <- getLine
-    if guess == "yes"
-        then putStrLn "I KNEW IT! Thank you."
-        else guessIt (s+1)
+divid :: RealFrac a => a -> a -> a
+divid x y = (x/y) - ((snd . properFraction) (x/y))
+
+guessIt :: RealFrac a => a -> a -> IO ()
+guessIt m1 m2 =
+    if m1==(m2-2) || m1==(m2-1) || m1==m2
+        then do
+        putStrLn $ "Is your number... " ++ (show . round) m2 ++ "? (answer \"yes\" or \"no\") "
+        guess <- getLine
+        if guess == "yes"
+            then putStrLn "I DID IT! Thank you."
+            else confirm (m2-1)
+        else do
+        let n = divid (m1+m2) 2
+        putStrLn $ "Is your number greater than " ++ (show . round) n ++ "? (answer \"yes\" or \"no\") "
+        gues <- getLine
+        if gues == "yes"
+            then guessIt n m2
+            else guessIt m1 n
+
+confirm :: RealFrac a => a -> IO ()
+confirm a = do
+    putStrLn $ "Okay. So it's " ++ (show . round) a ++ "?"
+    rep <- getLine
+    if rep == "yes"
+        then putStrLn "I DID IT! Thank you."
+        else putStrLn "I'm out of guesses then."
 
 main = do
-    putStrLn "Think of a number between 1 and 10 and I will guess it."
-    guessIt 1
+    putStrLn "Think of a number between 1 and 1000 and I will guess it."
+    guessIt 0 1000
