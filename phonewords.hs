@@ -26,6 +26,8 @@
 import PTfuncsyntax
 import Data.Char
 
+capitalize xs = [(toUpper . head) x :(tail x) | x<- xs]
+
 numtoList x = 
     let a = div x 1000
         b = div (x-(a*1000)) 100
@@ -51,20 +53,20 @@ idOpSub x
     |otherwise = []
 
 checkHead x
-    | x==2 = "abc"
-    | x==3 = "def"
-    | x==4 = "ghi"
-    | x==5 = "jkl"
-    | x==6 = "mno"
-    | x==7 = "pqrs"
-    | x==8 = "tuv"
-    | x==9 = "wxyz"
+    | x==2 = "abcABC"
+    | x==3 = "defDEF"
+    | x==4 = "ghiGHI"
+    | x==5 = "jklJKL"
+    | x==6 = "mnoMNO"
+    | x==7 = "pqrsPQRS"
+    | x==8 = "tuvTUV"
+    | x==9 = "wxyzWXYZ"
     |otherwise = []
     
 repSpace :: [Char] -> [Char]
 repSpace [] = []
 repSpace ('\n':xs) = ' ':(repSpace xs)
-repSpace (x:xs) = (toLower x):(repSpace xs)
+repSpace (x:xs) = x:(repSpace xs)
     
 finalize x xs=
     [a | a<-x, elem a xs]
@@ -74,5 +76,6 @@ main = do
     putStrLn "Type a four-digit number:"
     numb <- readLn
     let valids = filter (\x -> length x ==4 && elem (head x) ((checkHead . head . numtoList) numb)) ((words . repSpace) wordList)
-    let ansList = finalize ((findOptions . numtoList) numb) valids
+    let options = ((findOptions . numtoList) numb) ++ ((capitalize . findOptions . numtoList) numb)
+    let ansList = finalize options valids
     mapM_ putStrLn ansList
