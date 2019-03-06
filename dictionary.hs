@@ -46,8 +46,7 @@
 -}
 import Data.Char
 
----words* x = 
-
+repSpace :: [Char] -> [Char]
 repSpace [] = []
 repSpace ('\n':xs) = ' ':(repSpace xs)
 repSpace (x:xs) = x:(repSpace xs)
